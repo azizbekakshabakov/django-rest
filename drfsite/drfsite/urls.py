@@ -16,15 +16,26 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from drfsite import settings
 from mainapp.views import *
+from rest_framework import routers
+
+# router = routers.DefaultRouter()
+# router.register(r'comment', CommentViewSet) #basename='custom-url'
+# print(router.urls)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/commentlist/', CommentAPIView.as_view()),
-    path('api/v1/commentlist/<int:pk>', CommentAPIView.as_view()),
+    path('api/v1/comment/', CommentAPIList.as_view()),
+    path('api/v1/comment/<int:pk>/', CommentAPIUpdate.as_view()),
+    path('api/v1/commentdelete/<int:pk>', CommentAPIDestroy.as_view()),
+
+    # path('api/v1/', include(router.urls)), #/api/v1/comment/
+
+    # path('api/v1/commentlist/', CommentViewSet.as_view({'get': 'list'})),
+    # path('api/v1/commentlist/<int:pk>', CommentViewSet.as_view({'put': 'update'})),
 ]
 
 if settings.DEBUG:

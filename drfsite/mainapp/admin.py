@@ -2,13 +2,13 @@ from django.contrib import admin
 
 from .models import *
 
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'first_name', 'last_name', 'icon')
-    list_display_links = ('id', 'username')
-    search_fields = ('username', 'first_name', 'last_name')
-    list_editable = ('first_name', 'last_name')
-    list_filter = ('first_name',)
-    prepopulated_fields = {'slug': ('first_name', 'last_name')}
+# class UserAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'username', 'first_name', 'last_name', 'icon')
+#     list_display_links = ('id', 'username')
+#     search_fields = ('username', 'first_name', 'last_name')
+#     list_editable = ('first_name', 'last_name')
+#     list_filter = ('first_name',)
+#     prepopulated_fields = {'slug': ('first_name', 'last_name')}
 
 class VideoAdmin(admin.ModelAdmin):
     list_display = ('id', 'index', 'name', 'video', 'preview', 'user')
@@ -39,7 +39,7 @@ class PlaylistContentAdmin(admin.ModelAdmin):
     list_editable = ('url',)
     list_filter = ('playlist',)
 
-admin.site.register(User, UserAdmin)
+# admin.site.register(User, UserAdmin)
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Playlist, PlaylistAdmin)

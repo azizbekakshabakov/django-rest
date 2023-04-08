@@ -1,63 +1,44 @@
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .models import *
 from .serializers import *
 
-# class VideoAPIView(APIView):
-#     def get(self, request):
-#         videos = Video.objects.all().values()
-#         return Response({'videos': list(videos)})
-
-# class VideoAPIView(generics.ListAPIView):
-#     queryset = Video.objects.all()
-#     serializer_class = VideoSerializer
-
-class CommentAPIView(APIView):
-    def get(self, request):
-        comments = Comment.objects.all()
-        return Response({'comments': CommentSerializer(comments, many=True).data})
+# class CommentViewSet(viewsets.ModelViewSet):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
     
-    def post(self, request):
-        serializer = CommentSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+#     def get_queryset(self):
+#         pk = self.kwargs.get('pk')
 
-        # comment_new = Comment.objects.create(
-        #     content=request.data['content'],
-        #     user_id=request.data['user_id'],
-        #     video_id=request.data['video_id']
-        #     # user_id=User.objects.get(id=request.data['user_id']),
-        #     # video_id=Video.objects.get(id=request.data['video_id'])
-        # )
+#         if not pk:
+#             return Comment.objects.all()[:3]
+        
+#         return Comment.objects.filter(pk=pk)
 
-        return Response({'comment': serializer.data})
-    
-    def put(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        if not pk:
-            return Response({'error': 'Method PUT not allowed'})
-        
-        try:
-            instance = Comment.objects.get(pk=pk)
-        except:
-            return Response({'error': 'Object does not exist'})
-        
-        serializer = CommentSerializer(data=request.data, instance=instance)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({'comment': serializer.data})
-    
-    def delete(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        if not pk:
-            return Response({'error': 'Method DELETE not allowed'})
-        
-        try:
-            asdf = Comment.objects.get(pk=pk).delete()
-        except:
-            return Response({'error': 'Object does not exist'})
+#     @action(methods=['get'], detail=True)
+#     def video(self, request, pk=None):
+#         videos = Video.objects.get(pk=pk)
+#         return Response({'videos': videos.name})
 
-        return Response({'comment': 'Delete comment ' + str(pk)})
+
+
+class CommentAPIList(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+
+class CommentAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (IsOwnerOrReadOnly, )
+
+class CommentAPIDestroy(generics.RetrieveDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (IsAdminOrReadOnly, )

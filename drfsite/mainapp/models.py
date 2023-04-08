@@ -1,25 +1,26 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.urls import reverse
+from django.contrib.auth.models import User
 
-class User(models.Model):
-    username = models.CharField(max_length=255, verbose_name='Логин')
-    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
-    first_name = models.CharField(max_length=255, verbose_name='Имя')
-    last_name = models.CharField(max_length=255, verbose_name='Фамилия')
-    password = models.CharField(max_length=255)
-    icon = models.ImageField(upload_to='icons/', verbose_name='Аватар')
+# class User(models.Model):
+#     username = models.CharField(max_length=255, verbose_name='Логин')
+#     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
+#     first_name = models.CharField(max_length=255, verbose_name='Имя')
+#     last_name = models.CharField(max_length=255, verbose_name='Фамилия')
+#     password = models.CharField(max_length=255)
+#     icon = models.ImageField(upload_to='icons/', verbose_name='Аватар')
     
-    def __str__(self):
-        return self.username
+#     def __str__(self):
+#         return self.username
 
-    def get_absolute_url(self):
-        return reverse('user', kwargs={'user_slug': self.slug})
+#     def get_absolute_url(self):
+#         return reverse('user', kwargs={'user_slug': self.slug})
 
-    class Meta:
-        verbose_name = 'Пользователь/автор'
-        verbose_name_plural = 'Пользователи/авторы'
-        ordering = ['username', 'last_name', 'first_name']
+#     class Meta:
+#         verbose_name = 'Пользователь/автор'
+#         verbose_name_plural = 'Пользователи/авторы'
+#         ordering = ['username', 'last_name', 'first_name']
 
 class Video(models.Model):
     index = models.CharField(max_length=255, verbose_name='Индекс')
@@ -27,7 +28,7 @@ class Video(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название')
     video = models.FileField(upload_to='videos/', null=True, validators=[FileExtensionValidator(allowed_extensions=['mov','avi','mp4','webm','mkv'])], verbose_name='Видео')
     preview = models.ImageField(upload_to='previews/', verbose_name='Превьюшка')
-    user = models.ForeignKey('User', on_delete=models.DO_NOTHING, verbose_name='Автор', related_name='get_videos')
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Автор', related_name='get_videos')
 
     def __str__(self):
         return self.index
@@ -42,7 +43,7 @@ class Video(models.Model):
 
 class Comment(models.Model):
     content = models.TextField(verbose_name='Содержание')
-    user = models.ForeignKey('User', on_delete=models.DO_NOTHING, verbose_name='Комментатор')
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Комментатор')
     video = models.ForeignKey('Video', on_delete=models.DO_NOTHING, verbose_name='Видео')
 
     def __str__(self):
@@ -55,7 +56,7 @@ class Comment(models.Model):
 
 class Playlist(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название')
-    user = models.ForeignKey('User', on_delete=models.DO_NOTHING, verbose_name='Автор')
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='Автор')
 
     def __str__(self):
         return self.name
