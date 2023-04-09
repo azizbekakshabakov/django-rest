@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from drfsite import settings
 from mainapp.views import *
@@ -32,6 +32,9 @@ urlpatterns = [
     path('api/v1/comment/', CommentAPIList.as_view()),
     path('api/v1/comment/<int:pk>/', CommentAPIUpdate.as_view()),
     path('api/v1/commentdelete/<int:pk>', CommentAPIDestroy.as_view()),
+    
+    path('api/v1/auth/', include('djoser.urls')),
+    re_path(r'^auth', include('djoser.urls.authtoken'))
 
     # path('api/v1/', include(router.urls)), #/api/v1/comment/
 
