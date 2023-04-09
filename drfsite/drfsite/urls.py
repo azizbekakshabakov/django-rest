@@ -28,6 +28,7 @@ from rest_framework import routers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/drf-auth/', include('rest_framework.urls')),
     path('api/v1/comment/', CommentAPIList.as_view()),
     path('api/v1/comment/<int:pk>/', CommentAPIUpdate.as_view()),
     path('api/v1/commentdelete/<int:pk>', CommentAPIDestroy.as_view()),
