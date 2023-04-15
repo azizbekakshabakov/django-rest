@@ -3,7 +3,9 @@ from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.pagination import PageNumberPagination
 
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .models import *
@@ -27,16 +29,22 @@ from .serializers import *
 #         return Response({'videos': videos.name})
 
 
+class CommentAPIListPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'
+    max_page_size = 10000
 
 class CommentAPIList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
+    pagination_class = CommentAPIListPagination
 
 class CommentAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = (IsOwnerOrReadOnly, )
+    permission_classes = (IsAuthenticated, ) # IsOwnerOrReadOnly
+    # authentication_classes = (TokenAuthentication, )
 
 class CommentAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Comment.objects.all()

@@ -17,10 +17,11 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
+from rest_framework import routers
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from drfsite import settings
 from mainapp.views import *
-from rest_framework import routers
 
 # router = routers.DefaultRouter()
 # router.register(r'comment', CommentViewSet) #basename='custom-url'
@@ -34,7 +35,11 @@ urlpatterns = [
     path('api/v1/commentdelete/<int:pk>', CommentAPIDestroy.as_view()),
     
     path('api/v1/auth/', include('djoser.urls')),
-    re_path(r'^auth', include('djoser.urls.authtoken'))
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
+
+    path('api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 
     # path('api/v1/', include(router.urls)), #/api/v1/comment/
 
