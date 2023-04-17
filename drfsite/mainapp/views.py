@@ -6,6 +6,9 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.pagination import PageNumberPagination
+# from rest_framework import filters
+from django.contrib.auth.models import User
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .models import *
@@ -29,8 +32,16 @@ from .serializers import *
 #         return Response({'videos': videos.name})
 
 
+class VideoViewSet(viewsets.ModelViewSet):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+    filter_backends = (DjangoFilterBackend, )
+    filter_fields = ('user__id', )
+    permission_classes = (IsOwnerOrReadOnly, )
+
+
 class CommentAPIListPagination(PageNumberPagination):
-    page_size = 3
+    page_size = 300
     page_size_query_param = 'page_size'
     max_page_size = 10000
 
@@ -50,3 +61,16 @@ class CommentAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = (IsAdminOrReadOnly, )
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (IsAdminOrReadOnly, )
+    
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+
+        if not pk:
+            return User.objects.all()[:3]
+        
+        return User.objects.filter(pk=pk)
