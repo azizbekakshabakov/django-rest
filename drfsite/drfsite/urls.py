@@ -36,7 +36,11 @@ urlpatterns = [
     path('api/v1/comment/<int:pk>/', CommentAPIUpdate.as_view()),
     path('api/v1/commentdelete/<int:pk>', CommentAPIDestroy.as_view()),
 
-    path('api/v1/video/', VideoViewSet.as_view({'get': 'list'})),
+    path('api/v1/video/', VideoAPIList.as_view()),
+    path('api/v1/video/<int:pk>/', VideoAPIUpdate.as_view()),
+
+    # path('api/v1/video/', VideoViewSet.as_view({'get': 'list', 'post': 'create'})),
+    # path('api/v1/video/<int:pk>/', VideoViewSet.as_view({'put': 'update', 'get': 'retrieve', 'delete': 'destroy'})),
     
     path('api/v1/user/', UserViewSet.as_view({'get': 'list'})),
 

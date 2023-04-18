@@ -19,6 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('pk', 'username', 'email')
 
 class VideoSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    
     class Meta:
         model = Video
         fields = '__all__'

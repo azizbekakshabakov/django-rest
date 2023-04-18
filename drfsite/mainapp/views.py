@@ -31,13 +31,27 @@ from .serializers import *
 #         videos = Video.objects.get(pk=pk)
 #         return Response({'videos': videos.name})
 
-
+"""
 class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
     filter_backends = (DjangoFilterBackend, )
     filter_fields = ('user__id', )
     permission_classes = (IsOwnerOrReadOnly, )
+"""
+class VideoAPIList(generics.ListCreateAPIView):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    filter_backends = (DjangoFilterBackend, )
+    filterset_fields = ['user']
+    # pagination_class = VideoAPIListPagination
+
+class VideoAPIUpdate(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+    permission_classes = (IsOwnerOrReadOnly, ) # IsOwnerOrReadOnly
+    # authentication_classes = (TokenAuthentication, )
 
 
 class CommentAPIListPagination(PageNumberPagination):
@@ -61,6 +75,7 @@ class CommentAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = (IsAdminOrReadOnly, )
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

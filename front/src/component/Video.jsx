@@ -18,18 +18,17 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
+import ReactPlayer from 'react-player'
 
 // const drawerWidth = 240;
 
-export const Channel = () => {
+export const Video = () => {
     
-    const { result, error } = useDB(`http://127.0.0.1:8000/api/v1/video/?user=${useParams()['userid']}`);
+    const { result, error } = useDB(`http://127.0.0.1:8000/api/v1/video/${useParams()['videoid']}`);
 
-    // if (result === undefined) console.log('load');
-    // else {
-    //     console.log(result);
-    // }
-
+    if (result === undefined) console.log('load');
+    else console.log(result);
+    
     if (result === undefined) return (
         <></>
     );
@@ -56,28 +55,9 @@ export const Channel = () => {
                     <Toolbar />
                     <Container maxWidth="lg">
 
-                        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                            {result.results.map((video, index) => (
-                                <Grid item xs={2} sm={4} md={4} key={index}>
-
-                                    <Card sx={{ maxWidth: 345 }}>
-                                        <CardMedia
-                                            sx={{ height: 200 }}
-                                            image={`${video.preview}`}
-                                            title="green iguana"
-                                        />
-                                        <CardContent>
-                                            <Link href={`/video/${video.id}`} underline="none" style={{width: '100%'}}>
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    {video.name}
-                                                </Typography>
-                                            </Link>
-                                        </CardContent>
-                                    </Card>
-
-                                </Grid>
-                            ))}
-                        </Grid>
+                        <ReactPlayer width={'100%'} height={'650px'} playing controls url={`${result.video}`} light={`${result.preview}`} />
+                        <Typography variant="h4" sx={{ paddingTop: '1rem' }} gutterBottom>{result.name}</Typography>
+                        <Typography variant="h4" sx={{ paddingTop: '0.2rem' }} gutterBottom>Author: {result.user.username}</Typography>
 
                     </Container>
                 </Box>

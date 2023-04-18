@@ -1,6 +1,7 @@
 import { MainPage } from "./component/MainPage";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Channel } from './component/Channel';
+import { Video } from './component/Video';
 
 function App() {
   return (
@@ -14,11 +15,11 @@ function App() {
               <Route path=":userid" element={<Channel />} />
             </Route>
 
-            {/* <Route path="/comics" element={<Comics/>}>
-              <Route path=":comicsid" element={<SingleComics />} />
+            <Route path="/video">
+              <Route path=":videoid" element={<Video />} />
             </Route>
 
-            <Route path="/events" element={<Events/>}>
+            {/* <Route path="/events" element={<Events/>}>
               <Route path=":eventid" element={<SingleEvent />} />
             </Route> */}
 
