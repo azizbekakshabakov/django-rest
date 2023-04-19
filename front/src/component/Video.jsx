@@ -5,22 +5,14 @@ import { useState } from "react";
 import Grow from '@mui/material/Grow';
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
+import { NavBar } from './NavBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useDB } from './db-hook';
-import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
-import ReactPlayer from 'react-player'
-
-// const drawerWidth = 240;
+import ReactPlayer from 'react-player';
 
 export const Video = () => {
     
@@ -42,22 +34,16 @@ export const Video = () => {
                 
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-                    <Toolbar>
-                    <Typography variant="h6" noWrap component="div">
-                        Clipped drawer
-                    </Typography>
-                    </Toolbar>
-                </AppBar>
-                {/* Users list */}
+                <NavBar />
                 <SideBar /> 
+                {/* Users list */}
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <Toolbar />
                     <Container maxWidth="lg">
 
                         <ReactPlayer width={'100%'} height={'650px'} playing controls url={`${result.video}`} light={`${result.preview}`} />
                         <Typography variant="h4" sx={{ paddingTop: '1rem' }} gutterBottom>{result.name}</Typography>
-                        <Typography variant="h4" sx={{ paddingTop: '0.2rem' }} gutterBottom>Author: {result.user.username}</Typography>
+                        <Typography variant="button" display="block" sx={{ paddingTop: '0.1rem', color: 'text.secondary' }} gutterBottom>Author: <Link href={`/channel/${result.user}`} underline="none" style={{width: '100%'}}>{result.user_obj.username}</Link></Typography>
 
                     </Container>
                 </Box>

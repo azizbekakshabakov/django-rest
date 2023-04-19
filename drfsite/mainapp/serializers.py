@@ -19,8 +19,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('pk', 'username', 'email')
 
 class VideoSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    
+    user_obj = serializers.SerializerMethodField()
+
+    def get_user_obj(self, obj):
+        return {'username': obj.user.username}
+
     class Meta:
         model = Video
         fields = '__all__'

@@ -2,32 +2,33 @@ import { MainPage } from "./component/MainPage";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Channel } from './component/Channel';
 import { Video } from './component/Video';
+import { Login } from './component/Login';
 
 function App() {
   return (
-    // <DefaultContext.Provider value={{ toggleTheme, theme }}>
-        <Router>
-          <Routes>
+    <Router>
+      <Routes>
 
-            <Route path="/" element={<MainPage/>}/>
+        <Route path="/" element={<MainPage/>}/>
 
-            <Route path="/channel">
-              <Route path=":userid" element={<Channel />} />
-            </Route>
+        <Route path="/login" element={<Login/>}/>
 
-            <Route path="/video">
-              <Route path=":videoid" element={<Video />} />
-            </Route>
+        <Route path="/channel">
+          <Route path=":userid" element={<Channel />} />
+        </Route>
 
-            {/* <Route path="/events" element={<Events/>}>
-              <Route path=":eventid" element={<SingleEvent />} />
-            </Route> */}
+        <Route path="/video">
+          <Route path=":videoid" element={<Video />} />
+        </Route>
 
-            {/* <Route path='*' element={<NotFound/>} /> */}
+        {/* <Route path="/events" element={<Events/>}>
+          <Route path=":eventid" element={<SingleEvent />} />
+        </Route> */}
 
-          </Routes>
-        </Router>
-    // </DefaultContext.Provider>
+        {/* <Route path='*' element={<NotFound/>} /> */}
+
+      </Routes>
+    </Router>
   );
 }
 
