@@ -2,6 +2,7 @@ import { MainPage } from "./component/MainPage";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Channel } from './component/Channel';
 import { Video } from './component/Video';
+import { Signup } from './component/Signup';
 import { Login } from './component/Login';
 
 function App() {
@@ -10,6 +11,8 @@ function App() {
       <Routes>
 
         <Route path="/" element={<MainPage/>}/>
+
+        <Route path="/signup" element={<Signup/>}/>
 
         <Route path="/login" element={<Login/>}/>
 

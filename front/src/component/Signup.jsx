@@ -16,7 +16,7 @@ import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
-export const Login = () => {
+export const Signup = () => {
     const [login, setLogin] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -26,11 +26,8 @@ export const Login = () => {
 
     // if (error !== undefined) console.log(error);
 
-    if (result !== undefined) {
-        localStorage.setItem("refreshToken", result.refresh);
-        localStorage.setItem("accessToken", result.access);
+    if (result !== undefined) 
         window.location.replace("/login");
-    }
 
     const handleLoginChange = (event) => {
         setLogin(event.target.value);
@@ -48,19 +45,20 @@ export const Login = () => {
     const getAllItems = () => {
         axios
             .post(
-                "http://127.0.0.1:8000/api/v1/token/",
+                "http://127.0.0.1:8000/api/v1/auth/users/",
                 {
                     "username": login,
+                    "email": email,
                     "password": password
                 }
             )
             .then((res) => res.data)
             .then((res) => {
                 setResult(res);
-                console.log(res);
+                // console.log(res);
             })
             .catch((err) => {
-                setError(err.response.data.detail);
+                setError(JSON.parse(err.request.response));
             });
     };
 
@@ -76,11 +74,11 @@ export const Login = () => {
                 <Toolbar />
                 <Container maxWidth="sm" align="center">
 
-                    <Typography gutterBottom variant="h5" component="div" align="center">Login</Typography>
+                    <Typography gutterBottom variant="h5" component="div" align="center">Register</Typography>
                     <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                         <TextField id="standard-basic" label="Login" variant="standard" onChange={handleLoginChange} />
                     </FormControl>
-                    {/* { error !== undefined
+                    { error !== undefined
                     ?
                         error.username !== undefined 
                         ?
@@ -93,11 +91,28 @@ export const Login = () => {
                         ''
                     :
                         ''
-                    } */}
+                    }
+                    <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                        <TextField id="standard-basic" label="Email" variant="standard" onChange={handleEmailChange} />
+                    </FormControl>
+                    { error !== undefined
+                    ?
+                        error.email !== undefined 
+                        ?
+                            error.email.map((message, index) => (
+                                <Alert severity="error" key={index}>
+                                    <AlertTitle>{message}</AlertTitle>
+                                </Alert>
+                            ))
+                        :
+                        ''
+                    :
+                        ''
+                    }
                     <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                         <TextField id="standard-basic" label="Password" variant="standard" type="password" onChange={handlePasswordChange} />
                     </FormControl>
-                    {/* { error !== undefined
+                    { error !== undefined
                     ?
                         error.password !== undefined 
                         ?
@@ -110,7 +125,7 @@ export const Login = () => {
                         ''
                     :
                         ''
-                    } */}
+                    }
                     <Button variant="contained" size="large" sx={{marginTop: '1rem'}} onClick={getAllItems}>
                         Submit
                     </Button>

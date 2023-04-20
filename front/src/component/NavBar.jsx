@@ -4,6 +4,60 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 export const NavBar = () => {
+
+    const renderNotLogged = (
+        <>
+        <Typography variant="h6" component="a" href="/signup"
+            sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none',
+                paddingRight: '1rem'
+            }}>
+            Sign up
+        </Typography>
+        <Typography variant="h6" component="a" href="/login"
+            sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none',
+            }}>
+            Login
+        </Typography>
+        </>
+    );
+
+    const renderLogged = (
+        <>
+        <Typography variant="h6" component="a" href="/cabinet"
+            sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none',
+                paddingRight: '1rem'
+            }}>
+            Cabinet
+        </Typography>
+        <Typography variant="h6" component="a" href="/logout"
+            sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none',
+            }}>
+            Log out
+        </Typography>
+        </>
+    );
+
+
     return (
         <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar>
@@ -23,27 +77,8 @@ export const NavBar = () => {
                     Home
                 </Typography>
                 <Typography sx={{flexGrow: 1}}></Typography>
-                <Typography variant="h6" component="a" href="/signup"
-                    sx={{
-                        mr: 2,
-                        display: { xs: 'none', md: 'flex' },
-                        fontWeight: 700,
-                        color: 'inherit',
-                        textDecoration: 'none',
-                        paddingRight: '1rem'
-                    }}>
-                    Sign up
-                </Typography>
-                <Typography variant="h6" component="a" href="/login"
-                    sx={{
-                        mr: 2,
-                        display: { xs: 'none', md: 'flex' },
-                        fontWeight: 700,
-                        color: 'inherit',
-                        textDecoration: 'none',
-                    }}>
-                    Login
-                </Typography>
+                { localStorage.getItem !== undefined ? renderLogged : renderNotLogged }
+                
             </Toolbar>
         </AppBar>
     );
