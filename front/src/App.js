@@ -4,6 +4,7 @@ import { Channel } from './component/Channel';
 import { Video } from './component/Video';
 import { Signup } from './component/Signup';
 import { Login } from './component/Login';
+import { Cabinet } from "./component/Cabinet";
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route path="/signup" element={<Signup/>}/>
 
         <Route path="/login" element={<Login/>}/>
+
+        <Route path="/cabinet" element={<Cabinet/>}/>
 
         <Route path="/channel">
           <Route path=":userid" element={<Channel />} />

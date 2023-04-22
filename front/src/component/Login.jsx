@@ -18,9 +18,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 
 export const Login = () => {
     const [login, setLogin] = useState("");
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [send, setSend] = useState(false);
     const [result, setResult] = useState();
     const [error, setError] = useState();
 
@@ -29,15 +27,12 @@ export const Login = () => {
     if (result !== undefined) {
         localStorage.setItem("refreshToken", result.refresh);
         localStorage.setItem("accessToken", result.access);
-        window.location.replace("/login");
+        localStorage.setItem("username", login);
+        window.location.replace("/");
     }
 
     const handleLoginChange = (event) => {
         setLogin(event.target.value);
-    };
-
-    const handleEmailChange = (event) => {
-        setEmail(event.target.value);
     };
 
     const handlePasswordChange = (event) => {

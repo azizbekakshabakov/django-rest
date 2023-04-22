@@ -5,6 +5,12 @@ import Typography from '@mui/material/Typography';
 
 export const NavBar = () => {
 
+    const logout = () => {
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("accessToken");
+        window.location.replace("/");
+    };
+
     const renderNotLogged = (
         <>
         <Typography variant="h6" component="a" href="/signup"
@@ -44,7 +50,7 @@ export const NavBar = () => {
             }}>
             Cabinet
         </Typography>
-        <Typography variant="h6" component="a" href="/logout"
+        <Typography variant="h6" component="a" href="#" onClick={logout}
             sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -77,7 +83,7 @@ export const NavBar = () => {
                     Home
                 </Typography>
                 <Typography sx={{flexGrow: 1}}></Typography>
-                { localStorage.getItem !== undefined ? renderLogged : renderNotLogged }
+                { localStorage.getItem("refreshToken") !== null ? renderLogged : renderNotLogged }
                 
             </Toolbar>
         </AppBar>
