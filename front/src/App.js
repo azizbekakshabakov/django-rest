@@ -5,6 +5,7 @@ import { Video } from './component/Video';
 import { Signup } from './component/Signup';
 import { Login } from './component/Login';
 import { Cabinet } from "./component/Cabinet";
+import { Add } from "./component/Add";
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route path="/login" element={<Login/>}/>
 
         <Route path="/cabinet" element={<Cabinet/>}/>
+
+        <Route path="/add" element={<Add/>}/>
 
         <Route path="/channel">
           <Route path=":userid" element={<Channel />} />

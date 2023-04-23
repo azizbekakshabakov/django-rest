@@ -28,7 +28,26 @@ export const Login = () => {
         localStorage.setItem("refreshToken", result.refresh);
         localStorage.setItem("accessToken", result.access);
         localStorage.setItem("username", login);
-        window.location.replace("/");
+
+        axios
+            .get(
+                `http://127.0.0.1:8000/api/v1/auth/users/`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                    }
+                }
+            )
+            .then((res) => res.data)
+            .then((res) => {
+                localStorage.setItem("id", res.results[0].id);
+                // console.log(res);
+            })
+            .catch((err) => {
+                // setError(err.response.data.detail);
+            });
+
+        window.location.replace("/cabinet");
     }
 
     const handleLoginChange = (event) => {

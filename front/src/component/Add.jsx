@@ -26,7 +26,13 @@ import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
 import axios from "axios";
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import { v4 as uuidv4 } from 'uuid';
 
 function generate(element) {
     return [0, 1, 2].map((value) =>
@@ -40,15 +46,32 @@ const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 }));
 
-export const Cabinet = () => {
+export const Add = () => {
     const [dense, setDense] = React.useState(false);
     const [secondary, setSecondary] = React.useState(false);
     const [videos, setVideos] = React.useState([]);
+    const [index, setIndex] = React.useState(uuidv4());
+    const [slug, setSlug] = React.useState(uuidv4());
+    const [name, setName] = React.useState("");
 
     const { result, error } = useDB(`http://127.0.0.1:8000/api/v1/video/`);
 
-    const deleteVideo = (videoId) => {
+    const handleNameChange = (event) => {
+        setName(event.target.value);
+    };
+
+    const addVideo = (videoId) => {
         let verified = false;
+
+        let formData = new FormData();
+        let videofile = document.querySelector('#video');
+        let previewfile = document.querySelector('#preview');
+        formData.append("video", videofile.files[0]);
+        formData.append("preview", previewfile.files[0]);
+        formData.append("index", index);
+        formData.append("slug", slug);
+        formData.append("name", name);
+        formData.append("user", localStorage.getItem("id"));
 
         axios
             .post(
@@ -83,8 +106,8 @@ export const Cabinet = () => {
         }
         
         axios
-            .delete(
-                `http://127.0.0.1:8000/api/v1/video/${videoId}/`,
+            .post(
+                `http://127.0.0.1:8000/api/v1/video/`, formData,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`
@@ -97,7 +120,7 @@ export const Cabinet = () => {
                 window.location.replace("/cabinet");
             })
             .catch((err) => {
-                // console.log(err);
+                console.log(err);
             });
     };
 
@@ -126,40 +149,36 @@ export const Cabinet = () => {
                     <Toolbar />
                     <Container maxWidth="lg">
 
-                        <Grid item xs={12} md={6}>
-                            <Button variant="contained" sx={{ mt: 4, mb: 2 }} href="/add">Add</Button>
-                            <Demo>
-                                <List dense={dense}>
-                                { result.results.map((video, index) => {
-                                        if (video.user_obj.username === localStorage.getItem("username")) {
-                                            return (
-                                                <ListItem
-                                                secondaryAction={
-                                                    <IconButton edge="end" aria-label="delete" onClick={() => deleteVideo(video.id)}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                }
-                                                key={index}
-                                                >
-                                                    <ListItemAvatar sx={{marginRight:"1rem"}}>
-                                                        {/* <Avatar> */}
-                                                            {/* <FolderIcon /> */}
-                                                            <img src={video.preview} height="90px" width="160px" />
-                                                        {/* </Avatar> */}
-                                                    </ListItemAvatar>
-                                                    <ListItemText
-                                                        primary={video.name}
-                                                        secondary={video.user_obj.username}
-                                                    />
-                                                </ListItem>
-                                            );
-                                        }
-                                        return "";
-                                    })
-                                }
-                                </List>
-                            </Demo>
-                        </Grid>
+                        <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                            <TextField id="standard-basic" label="Name" variant="standard" onChange={handleNameChange} />
+                        </FormControl>
+                        {/* <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                            <TextField id="standard-basic" label="Login" variant="standard" onChange={handleLoginChange} />
+                        </FormControl> */}
+                        <Button
+                            variant="contained"
+                            component="label"
+                        >
+                            Upload video
+                            <input
+                                type="file"
+                                hidden
+                                id="video"
+                            />
+                        </Button>
+                        <Button
+                            variant="contained"
+                            component="label"
+                        >
+                            Upload preview
+                            <input
+                                type="file"
+                                hidden
+                                id="preview"
+                            />
+                        </Button>
+
+                        <Button variant="contained" sx={{ mt: 4, mb: 2 }} onClick={addVideo}>Add</Button>
 
                     </Container>
                 </Box>
