@@ -1,5 +1,3 @@
-// import { AppBarComponent } from "../mui/app-bar";
-import { SideBar } from "./SideBar";
 import { NavBar } from './NavBar';
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -9,8 +7,7 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import { Typography } from "@mui/material";
-import { useDB } from './db-hook';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';

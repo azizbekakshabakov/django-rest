@@ -8,6 +8,8 @@ export const NavBar = () => {
     const logout = () => {
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("accessToken");
+        localStorage.removeItem("id");
+        localStorage.removeItem("username");
         window.location.replace("/");
     };
 

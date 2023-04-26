@@ -1,4 +1,3 @@
-// import { AppBarComponent } from "../mui/app-bar";
 import { SideBar } from "./SideBar";
 import { NavBar } from './NavBar';
 import * as React from 'react';
@@ -12,17 +11,27 @@ import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Link from '@mui/material/Link';
+import { Link } from "@mui/material";
+import Button from '@mui/material/Button';
 
-// const drawerWidth = 240;
+let count = 1;
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+
+let url = 'http://127.0.0.1:8000/api/v1/video/';
+if (urlParams.get('page') !== null) {
+    url = url.concat('?page=' + urlParams.get('page'));
+}
 
 export const MainPage = () => {
-
-    const { result, error } = useDB(`http://127.0.0.1:8000/api/v1/video/`);
+    const { result, error } = useDB(url);
 
     if (result === undefined) console.log('load');
     else {
         console.log(result);
+        console.log(Math.ceil(result.count / 6));
+        count = Math.ceil(result.count / 6);
     }
 
     if (result === undefined) return (
@@ -45,7 +54,7 @@ export const MainPage = () => {
                     <Toolbar />
                     <Container maxWidth="lg">
 
-                        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{marginBottom: '1rem'}}>
                             {result.results.map((video, index) => (
                                 <Grid item xs={2} sm={4} md={4} key={index}>
 
@@ -67,6 +76,14 @@ export const MainPage = () => {
                                 </Grid>
                             ))}
                         </Grid>
+
+                        <Typography gutterBottom component="div" align="center">
+                        { Array.from({length: count}, (v, i) => i).map((value, index) => (
+                            <Button href={`/?page=${value+1}`} key={index}>
+                                {value+1}
+                            </Button>
+                        )) }
+                        </Typography>
 
                     </Container>
                 </Box>

@@ -1,32 +1,21 @@
-import { SideBar } from "./SideBar";
 import { NavBar } from './NavBar';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { useDB } from './db-hook';
 import Container from '@mui/material/Container';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
-import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
 import axios from "axios";
 import Button from '@mui/material/Button';
+import { Error } from "./Error";
 
 function generate(element) {
     return [0, 1, 2].map((value) =>
@@ -45,7 +34,9 @@ export const Cabinet = () => {
     const [secondary, setSecondary] = React.useState(false);
     const [videos, setVideos] = React.useState([]);
 
-    const { result, error } = useDB(`http://127.0.0.1:8000/api/v1/video/`);
+    const { result, error } = useDB(`http://127.0.0.1:8000/api/v1/video/?page_size=100`);
+
+    if (localStorage.getItem("refreshToken") === null) return <Error/>;
 
     const deleteVideo = (videoId) => {
         let verified = false;

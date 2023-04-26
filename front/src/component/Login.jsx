@@ -1,5 +1,3 @@
-// import { AppBarComponent } from "../mui/app-bar";
-import { SideBar } from "./SideBar";
 import { NavBar } from './NavBar';
 import * as React from 'react';
 import Box from '@mui/material/Box';
@@ -9,12 +7,9 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import { Typography } from "@mui/material";
-import { useDB } from './db-hook';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import Button from '@mui/material/Button';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 
 export const Login = () => {
     const [login, setLogin] = useState("");
@@ -42,12 +37,12 @@ export const Login = () => {
             .then((res) => {
                 localStorage.setItem("id", res.results[0].id);
                 // console.log(res);
+                window.location.replace("/cabinet");
             })
             .catch((err) => {
                 // setError(err.response.data.detail);
+                console.log(err);
             });
-
-        window.location.replace("/cabinet");
     }
 
     const handleLoginChange = (event) => {

@@ -14,54 +14,18 @@ from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .models import *
 from .serializers import *
 
-# class CommentViewSet(viewsets.ModelViewSet):
-#     queryset = Comment.objects.all()
-#     serializer_class = CommentSerializer
-    
-#     def get_queryset(self):
-#         pk = self.kwargs.get('pk')
+class VideoAPIListPagination(PageNumberPagination):
+    page_size = 6
+    page_size_query_param = 'page_size'
+    max_page_size = 10
 
-#         if not pk:
-#             return Comment.objects.all()[:3]
-        
-#         return Comment.objects.filter(pk=pk)
-
-#     @action(methods=['get'], detail=True)
-#     def video(self, request, pk=None):
-#         videos = Video.objects.get(pk=pk)
-#         return Response({'videos': videos.name})
-
-"""
-class VideoViewSet(viewsets.ModelViewSet):
-    queryset = Video.objects.all()
-    serializer_class = VideoSerializer
-    filter_backends = (DjangoFilterBackend, )
-    filter_fields = ('user__id', )
-    permission_classes = (IsOwnerOrReadOnly, )
-"""
 class VideoAPIList(generics.ListCreateAPIView):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = ['user']
-    # pagination_class = VideoAPIListPagination
-
-    # def list(self, request):
-    #     queryset = Video.objects.filter(pk=request.user.pk)
-    #     serializer = VideoSerializer(queryset, many=True)
-    #     return Response(serializer.data)
-
-    # def list(self, request, *args, **kwargs):
-    #     queryset = self.filter_queryset(self.get_queryset())
-
-    #     page = self.paginate_queryset(queryset)
-    #     if page is not None:
-    #         serializer = self.get_serializer(page, many=True)
-    #         return self.get_paginated_response(serializer.data)
-
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return Response(serializer.data)
+    pagination_class = VideoAPIListPagination
 
 class VideoAPIUpdate(generics.RetrieveUpdateDestroyAPIView):
     queryset = Video.objects.all()
@@ -93,15 +57,13 @@ class CommentAPIDestroy(generics.RetrieveDestroyAPIView):
     permission_classes = (IsAdminOrReadOnly, )
 
 
+class UserAPIListPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAdminOrReadOnly, )
-    
-    def get_queryset(self):
-        pk = self.kwargs.get('pk')
-
-        if not pk:
-            return User.objects.all()[:3]
-        
-        return User.objects.filter(pk=pk)
+    pagination_class = UserAPIListPagination

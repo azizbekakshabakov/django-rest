@@ -5,8 +5,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
 import { useDB } from './db-hook';
@@ -15,7 +13,7 @@ import Link from '@mui/material/Link';
 const drawerWidth = 240;
 
 export const SideBar = () => {
-    const { result, error } = useDB('http://127.0.0.1:8000/api/v1/user/');
+    const { result, error } = useDB('http://127.0.0.1:8000/api/v1/user/?page_size=100');
 
     // if (result === undefined) console.log('load');
     // else {
